@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>cmdb_ci_server</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="cmdb_ci_server">sys_class_name=cmdb_ci_linux_server^ORsys_class_name=cmdb_ci_win_server^ORsys_class_name=cmdb_ci_computer^EQ<item endquery="false" field="sys_class_name" goto="false" newquery="false" operator="=" or="false" value="cmdb_ci_linux_server"/>
+            <item endquery="false" field="sys_class_name" goto="false" newquery="false" operator="=" or="true" value="cmdb_ci_win_server"/>
+            <item endquery="false" field="sys_class_name" goto="false" newquery="false" operator="=" or="true" value="cmdb_ci_computer"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>BR-company-location</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+ 
+               // Get the IP address
+               var ipaddr = current.ip_address;
+               var n = ipaddr.lastIndexOf(".");
+               if (n > 0) {
+                              // Extract the subnet and find a matching Network record
+                              var subnet = ipaddr.substr(0, n) + ".0";
+                              var nw = new GlideRecord("network_company_location");
+                              nw.addQuery('network', subnet);
+                              nw.query();
+                              if (nw.next()) {
+                                            // var locName = nw.getDisplayValue('location');
+                                            // current.location.setDisplayValue(nw.location);
+
+								             current.location = nw.location;
+                                             current.company = nw.company;
+                                             current.updateWithReferences();
+                                             //gs.log(">> Location/Company updated for CI with ip " + ipaddr + " :: Location: "+ locName + " :: Company: " + nw.location.company.name);
+                              }
+               }
+ 
+})(current, previous);
+ 
+ ]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>graeme</sys_created_by>
+        <sys_created_on>2017-06-15 02:34:49</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>dcbeaaaedb5bfe40c18e752dbf961919</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>BR-company-location</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="ITOM POV Collateral" source="x_inag_itom_stuff">b6dc226edb5bfe40c18e752dbf9619cc</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="ITOM POV Collateral">b6dc226edb5bfe40c18e752dbf9619cc</sys_scope>
+        <sys_update_name>sys_script_dcbeaaaedb5bfe40c18e752dbf961919</sys_update_name>
+        <sys_updated_by>graeme</sys_updated_by>
+        <sys_updated_on>2017-06-15 02:34:49</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=dcbeaaaedb5bfe40c18e752dbf961919"/>
+</record_update>
